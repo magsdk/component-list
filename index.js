@@ -8,7 +8,7 @@
 'use strict';
 
 var Component = require('stb-component'),
-    codes     = require('stb-rc').codes;
+    keys      = require('stb-keys');
 
 
 /**
@@ -210,12 +210,12 @@ List.prototype.defaultEvents = {
     mousewheel: function ( event ) {
         // scrolling by Y axis
         if ( this.type === this.TYPE_VERTICAL && event.wheelDeltaY ) {
-            this.move(event.wheelDeltaY > 0 ? codes.up : codes.down);
+            this.move(event.wheelDeltaY > 0 ? keys.up : keys.down);
         }
 
         // scrolling by X axis
         if ( this.type === this.TYPE_HORIZONTAL && event.wheelDeltaX ) {
-            this.move(event.wheelDeltaX > 0 ? codes.left : codes.right);
+            this.move(event.wheelDeltaX > 0 ? keys.left : keys.right);
         }
     },
 
@@ -225,19 +225,19 @@ List.prototype.defaultEvents = {
      * @param {Event} event generated event
      */
     keydown: function ( event ) {
-        switch ( event.keyCode ) {
-            case codes.up:
-            case codes.down:
-            case codes.right:
-            case codes.left:
-            case codes.pageUp:
-            case codes.pageDown:
-            case codes.home:
-            case codes.end:
+        switch ( event.code ) {
+            case keys.up:
+            case keys.down:
+            case keys.right:
+            case keys.left:
+            case keys.pageUp:
+            case keys.pageDown:
+            case keys.home:
+            case keys.end:
                 // cursor move only on arrow keys
-                this.move(event.keyCode);
+                this.move(event.code);
                 break;
-            case codes.ok:
+            case keys.enter:
                 // there are some listeners
                 if ( this.events['click:item'] && this.$focusItem ) {
                     // notify listeners
@@ -646,13 +646,13 @@ List.prototype.move = function ( direction ) {
         return;
     }
     switch ( direction ) {
-        case codes.left:
+        case keys.left:
             if ( this.type === this.TYPE_HORIZONTAL ) {
                 force = true;
             } else {
                 break;
             }
-        case codes.up:
+        case keys.up:
             if ( force || this.type === this.TYPE_VERTICAL ) {
                 if ( this.$focusItem && this.$focusItem.index > 0 ) {
                     if ( this.$focusItem === this.$body.firstChild ) {
@@ -682,7 +682,7 @@ List.prototype.move = function ( direction ) {
                         // already at the beginning
                         if ( this.cycle ) {
                             // jump to the end of the list
-                            this.move(codes.end);
+                            this.move(keys.end);
                         }
                         if ( this.events['overflow'] ) {
                             // notify listeners
@@ -692,13 +692,13 @@ List.prototype.move = function ( direction ) {
                 }
             }
             break;
-        case codes.right:
+        case keys.right:
             if ( this.type === this.TYPE_HORIZONTAL ) {
                 force = true;
             } else {
                 break;
             }
-        case codes.down:
+        case keys.down:
             if ( force || this.type === this.TYPE_VERTICAL ) {
                 if ( this.$focusItem && this.$focusItem.index < this.data.length - 1 ) {
                     if ( this.$focusItem === this.$body.lastChild ) {
@@ -728,7 +728,7 @@ List.prototype.move = function ( direction ) {
                         // already at the beginning
                         if ( this.cycle ) {
                             // jump to the beginning of the list
-                            this.move(codes.home);
+                            this.move(keys.home);
                         }
                         if ( this.events['overflow'] ) {
                             // notify listeners
@@ -738,7 +738,7 @@ List.prototype.move = function ( direction ) {
                 }
             }
             break;
-        case codes.pageUp:
+        case keys.pageUp:
             if ( this.provider ) {
                 this.provider.get(direction, function ( error, data, pos ) {
                     if ( error ) {
@@ -768,7 +768,7 @@ List.prototype.move = function ( direction ) {
 
             this.focusItem(this.$body.firstChild);
             break;
-        case codes.pageDown:
+        case keys.pageDown:
             if ( this.provider ) {
                 this.provider.get(direction, function ( error, data, pos ) {
                     if ( error ) {
@@ -804,7 +804,7 @@ List.prototype.move = function ( direction ) {
                 this.focusItem(this.$body.children[this.data.length - 1]);
             }
             break;
-        case codes.home:
+        case keys.home:
             if ( this.provider ) {
                 this.provider.get(direction, function ( error, data, pos ) {
                     if ( error ) {
@@ -827,7 +827,7 @@ List.prototype.move = function ( direction ) {
             this.renderView(0);
             this.focusItem(this.$body.firstChild);
             break;
-        case codes.end:
+        case keys.end:
             if ( this.provider ) {
                 this.provider.get(direction, function ( error, data, pos ) {
                     if ( error ) {
