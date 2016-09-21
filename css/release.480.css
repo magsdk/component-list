@@ -29,33 +29,33 @@
             text-align: center;
             vertical-align: middle; }
 
-.mag-component-panel {
+.mag-component-list {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     background-color: #333;
     width: 100%; }
-    .mag-component-panel.hidden {
+    .mag-component-list.hidden {
         display: none; }
-    .mag-component-panel > .item {
+    .mag-component-list > .item {
         cursor: pointer;
         padding: 0 5px;
         vertical-align: middle;
         height: 32px;
         line-height: 32px; }
-        .mag-component-panel > .item.mark {
+        .mag-component-list > .item.mark {
             background-color: green;
             color: black; }
-        .mag-component-panel > .item.focus {
+        .mag-component-list > .item.focus {
             background-color: orange;
             color: black; }
-        .mag-component-panel > .item.focus.mark {
+        .mag-component-list > .item.focus.mark {
             background-color: #ae7200;
             color: white; }
-    .mag-component-panel.horizontal {
+    .mag-component-list.horizontal {
         display: table;
         table-layout: fixed;
         width: 100%; }
-        .mag-component-panel.horizontal > .item {
+        .mag-component-list.horizontal > .item {
             display: table-cell;
             text-align: center;
             vertical-align: middle; }
