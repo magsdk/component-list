@@ -128,7 +128,7 @@ function List ( config ) {
 
 
     // set default className if classList property empty or undefined
-    config.className = 'list ' + (config.className || '');
+    //config.className = 'list ' + (config.className || '');
 
     if ( this.type === this.TYPE_HORIZONTAL ) {
         config.className += ' horizontal';
@@ -171,6 +171,8 @@ function List ( config ) {
 List.prototype = Object.create(Component.prototype);
 List.prototype.constructor = List;
 
+// set component name
+List.prototype.name = 'mag-component-list';
 
 List.prototype.TYPE_VERTICAL   = 1;
 List.prototype.TYPE_HORIZONTAL = 2;
