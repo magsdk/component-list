@@ -224,7 +224,7 @@ List.prototype.defaultEvents = {
     /**
      * Default method to handle keyboard keydown events.
      *
-     * @param {Event} event generated event
+     * @param {Object} event generated event
      */
     keydown: function ( event ) {
         switch ( event.code ) {
@@ -254,7 +254,7 @@ List.prototype.defaultEvents = {
 /**
  * Default method to move focus according to pressed keys.
  *
- * @param {Event} event generated event source of movement
+ * @param {Object} event generated event source of movement
  */
 //List.prototype.navigateDefault = function ( event ) {
 //    switch ( event.code ) {
