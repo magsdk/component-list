@@ -127,8 +127,7 @@ function List ( config ) {
     this.provider = null;
 
 
-    // set default className if classList property empty or undefined
-    //config.className = 'list ' + (config.className || '');
+    config.className = config.className || '';
 
     if ( this.type === this.TYPE_HORIZONTAL ) {
         config.className += ' horizontal';
