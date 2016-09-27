@@ -917,7 +917,8 @@ List.prototype.focusItem = function ( $item ) {
         this.$focusItem.data = this.data[this.$focusItem.index];
 
         // correct CSS
-        $item.classList.add('focus theme-focus');
+        $item.classList.add('focus');
+        $item.classList.add('theme-focus');
 
         // there are some listeners
         if ( this.events['focus:item'] ) {
