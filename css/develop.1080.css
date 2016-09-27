@@ -13,15 +13,6 @@
         vertical-align: middle;
         height: 72px;
         line-height: 72px; }
-        .mag-component-list > .body > .item.mark {
-            background-color: green;
-            color: black; }
-        .mag-component-list > .body > .item.focus {
-            background-color: orange;
-            color: black; }
-        .mag-component-list > .body > .item.focus.mark {
-            background-color: #ae7200;
-            color: white; }
     .mag-component-list.horizontal {
         display: table;
         table-layout: fixed;

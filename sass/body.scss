@@ -19,20 +19,20 @@
             line-height:    $listItemHeight;
             //display: table-row;
 
-            &.mark {
-                background-color: green;
-                color:            black;
-            }
-
-            &.focus {
-                background-color: orange;
-                color:            black;
-            }
-
-            &.focus.mark {
-                background-color: #ae7200;
-                color:            white;
-            }
+            //&.mark {
+            //    background-color: green;
+            //    color:            black;
+            //}
+            //
+            //&.focus {
+            //    background-color: orange;
+            //    color:            black;
+            //}
+            //
+            //&.focus.mark {
+            //    background-color: #ae7200;
+            //    color:            white;
+            //}
         }
     }
     &.horizontal {
