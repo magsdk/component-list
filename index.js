@@ -133,7 +133,7 @@ function List ( config ) {
         config.className += ' horizontal';
     }
 
-    config.className += ' theme-main';
+    //config.className += ' theme-main';
 
     // parent constructor call
     Component.call(this, config);
@@ -403,7 +403,8 @@ List.prototype.init = function ( config ) {
         for ( i = 0; i < this.size; i++ ) {
             item = document.createElement('div');
             item.index = i;
-            item.className = 'item theme-list-item';
+            //item.className = 'item theme-list-item';
+            item.className = 'item';
 
             item.addEventListener('click', onClick);
             this.$body.appendChild(item);
@@ -895,7 +896,7 @@ List.prototype.focusItem = function ( $item ) {
 
             // style
             $prev.classList.remove('focus');
-            $prev.classList.remove('theme-focus');
+            //$prev.classList.remove('theme-focus');
 
             // there are some listeners
             if ( this.events['blur:item'] ) {
@@ -917,7 +918,7 @@ List.prototype.focusItem = function ( $item ) {
 
         // correct CSS
         $item.classList.add('focus');
-        $item.classList.add('theme-focus');
+        //$item.classList.add('theme-focus');
 
         // there are some listeners
         if ( this.events['focus:item'] ) {
@@ -976,7 +977,7 @@ List.prototype.blurItem = function ( $item ) {
         }
 
         $item.classList.remove('focus');
-        $item.classList.remove('theme-focus');
+        //$item.classList.remove('theme-focus');
 
         // there are some listeners
         if ( this.events['blur:item'] ) {
