@@ -449,7 +449,6 @@ List.prototype.init = function ( config ) {
     } else if ( config.data ) {
         this.setData(config);
     }
-
 };
 
 /**
