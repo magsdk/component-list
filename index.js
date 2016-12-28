@@ -415,6 +415,14 @@ List.prototype.init = function ( config ) {
         this.size = config.size;
     }
 
+    if ( config.events ) {
+        // apply all given events
+        Object.keys(config.events).forEach(function ( name ) {
+            self.events[name] = null;
+            self.addListener(name, config.events[name]);
+        });
+    }
+
     // geometry has changed or initial draw
     if ( this.size !== currSize ) {
         // non-empty list
