@@ -4,6 +4,7 @@
  */
 
 /* eslint no-path-concat: 0 */
+/* eslint complexity: [error, 37] */
 
 'use strict';
 
@@ -44,7 +45,7 @@ var Component = require('stb-component'),
  * @param {number}   [config.focusIndex]  list item index to make item focused (move view window to this position)
  * @param {boolean}  [config.cycle=true]  allow or not to jump to the opposite side of a list when there is nowhere to go next
  * @param {boolean}  [config.scroll=null] associated ScrollBar component link
- * @param {object}   [config.provider]      data provider
+ * @param {Object}   [config.provider]    data provider
  *
  * @fires module:stb/ui/list~List#click:item
  */
@@ -304,7 +305,7 @@ List.prototype.defaultEvents = {
  * @return {Array} reworked incoming data
  */
 function normalize ( data ) {
-    var i, item;
+    var idx, item;
 
     if ( DEVELOP ) {
         if ( arguments.length !== 1 ) {
@@ -316,14 +317,14 @@ function normalize ( data ) {
     }
 
     // rows
-    for ( i = 0; i < data.length; i++ ) {
+    for ( idx = 0; idx < data.length; idx++ ) {
         // cell value
-        item = data[i];
+        item = data[idx];
         // primitive value
         if ( typeof item !== 'object' ) {
             // wrap with defaults
-            item = data[i] = {
-                value: data[i]
+            item = data[idx] = {
+                value: data[idx]
             };
         }
 
@@ -367,7 +368,7 @@ List.prototype.init = function ( config ) {
                 }
             }
         },
-        item, i;
+        item, idx;
 
     if ( DEVELOP ) {
         if ( arguments.length !== 1 ) {
@@ -432,9 +433,9 @@ List.prototype.init = function ( config ) {
         }
 
         // create new items
-        for ( i = 0; i < this.size; i++ ) {
+        for ( idx = 0; idx < this.size; idx++ ) {
             item = document.createElement('div');
-            item.index = i;
+            item.index = idx;
             //item.className = 'item theme-list-item';
             item.className = 'item';
 
@@ -492,7 +493,7 @@ List.prototype.setData = function ( config ) {
     // apply list of items
 
     if ( config.data ) {
-        if ( DEBUG ) {
+        if ( DEVELOP ) {
             if ( !Array.isArray(config.data) ) { throw new Error(__filename + ': wrong config.data type'); }
         }
         // prepare user data
@@ -580,7 +581,7 @@ List.prototype.setData = function ( config ) {
  * @fires module:stb/ui/list~List#move:view
  */
 List.prototype.renderView = function ( index ) {
-    var $item, i, itemData, prevIndex, currIndex;
+    var $item, idx, itemData, prevIndex, currIndex;
 
     if ( DEVELOP ) {
         if ( arguments.length !== 1 ) {
@@ -605,9 +606,9 @@ List.prototype.renderView = function ( index ) {
         this.viewIndex = currIndex = index;
 
         // rebuild all visible items
-        for ( i = 0; i < this.size; i++ ) {
+        for ( idx = 0; idx < this.size; idx++ ) {
             // shortcuts
-            $item    = this.$body.children[i];
+            $item    = this.$body.children[idx];
             itemData = this.data[index];
 
             // real item or stub
@@ -645,7 +646,7 @@ List.prototype.renderView = function ( index ) {
 
         // update a linked scroll component
         if ( this.scroll ) {
-            this.scroll.scrollTo(this.provider? this.provider.head + this.provider.pos : this.viewIndex);
+            this.scroll.scrollTo(this.provider ? this.provider.head + this.provider.pos : this.viewIndex);
         }
 
         // full rebuild
@@ -703,13 +704,13 @@ List.prototype.move = function ( direction ) {
     if ( !this.data.length ) {
         return;
     }
+
     switch ( direction ) {
         case keys.left:
             if ( this.type === this.TYPE_HORIZONTAL ) {
                 force = true;
-            } else {
-                break;
             }
+            break;
         case keys.up:
             if ( force || this.type === this.TYPE_VERTICAL ) {
                 if ( this.$focusItem && this.$focusItem.index > 0 ) {
@@ -718,34 +719,30 @@ List.prototype.move = function ( direction ) {
                     } else {
                         this.focusItem(this.$focusItem.previousSibling);
                     }
-                } else {
-                    if ( this.provider ) {
-                        this.provider.get(direction, function ( error, data, pos ) {
-                            if ( error ) {
-                                if ( self.events['data:error'] ) {
-                                    /**
+                } else if ( this.provider ) {
+                    this.provider.get(direction, function ( error, data, pos ) {
+                        if ( error ) {
+                            if ( self.events['data:error'] ) {
+                                /**
                                      * Provider get error while take new data
                                      *
                                      * @event module:stb/ui/list~List#data:error
                                      */
-                                    self.emit('data:error', error);
-                                }
-                            } else {
-                                if ( data ) {
-                                    self.setData({data: data, focusIndex: pos || pos === 0 ? pos : self.$focusItem.index});
-                                }
+                                self.emit('data:error', error);
                             }
-                        });
-                    } else {
-                        // already at the beginning
-                        if ( this.cycle ) {
-                            // jump to the end of the list
-                            this.move(keys.end);
+                        } else if ( data ) {
+                            self.setData({data: data, focusIndex: pos || pos === 0 ? pos : self.$focusItem.index});
                         }
-                        if ( this.events['overflow'] ) {
-                            // notify listeners
-                            this.emit('overflow', {direction: direction, cycle: this.cycle});
-                        }
+                    });
+                } else {
+                    // already at the beginning
+                    if ( this.cycle ) {
+                        // jump to the end of the list
+                        this.move(keys.end);
+                    }
+                    if ( this.events['overflow'] ) {
+                        // notify listeners
+                        this.emit('overflow', {direction: direction, cycle: this.cycle});
                     }
                 }
             }
@@ -753,9 +750,8 @@ List.prototype.move = function ( direction ) {
         case keys.right:
             if ( this.type === this.TYPE_HORIZONTAL ) {
                 force = true;
-            } else {
-                break;
             }
+            break;
         case keys.down:
             if ( force || this.type === this.TYPE_VERTICAL ) {
                 if ( this.$focusItem && this.$focusItem.index < this.data.length - 1 ) {
@@ -764,34 +760,30 @@ List.prototype.move = function ( direction ) {
                     } else {
                         this.focusItem(this.$focusItem.nextSibling);
                     }
-                } else {
-                    if ( this.provider ) {
-                        this.provider.get(direction, function ( error, data, pos ) {
-                            if ( error ) {
-                                if ( self.events['data:error'] ) {
-                                    /**
+                } else if ( this.provider ) {
+                    this.provider.get(direction, function ( error, data, pos ) {
+                        if ( error ) {
+                            if ( self.events['data:error'] ) {
+                                /**
                                      * Provider get error while take new data
                                      *
                                      * @event module:stb/ui/list~List#data:error
                                      */
-                                    self.emit('data:error', error);
-                                }
-                            } else {
-                                if ( data ) {
-                                    self.setData({data: data, focusIndex: pos || pos === 0 ? pos : self.$focusItem.index});
-                                }
+                                self.emit('data:error', error);
                             }
-                        });
-                    } else {
-                        // already at the beginning
-                        if ( this.cycle ) {
-                            // jump to the beginning of the list
-                            this.move(keys.home);
+                        } else if ( data ) {
+                            self.setData({data: data, focusIndex: pos || pos === 0 ? pos : self.$focusItem.index});
                         }
-                        if ( this.events['overflow'] ) {
-                            // notify listeners
-                            this.emit('overflow', {direction: direction, cycle: this.cycle});
-                        }
+                    });
+                } else {
+                    // already at the beginning
+                    if ( this.cycle ) {
+                        // jump to the beginning of the list
+                        this.move(keys.home);
+                    }
+                    if ( this.events['overflow'] ) {
+                        // notify listeners
+                        this.emit('overflow', {direction: direction, cycle: this.cycle});
                     }
                 }
             }
@@ -808,12 +800,11 @@ List.prototype.move = function ( direction ) {
                              */
                             self.emit('data:error', error);
                         }
-                    } else {
-                        if ( data ) {
-                            self.setData({data: data, focusIndex: pos? pos : 0});
-                        }
+                    } else if ( data ) {
+                        self.setData({data: data, focusIndex: pos ? pos : 0});
                     }
                 });
+
                 return;
             }
             if ( this.viewIndex < this.size ) {
@@ -829,6 +820,8 @@ List.prototype.move = function ( direction ) {
         case keys.pageDown:
             if ( this.provider ) {
                 this.provider.get(direction, function ( error, data, pos ) {
+                    var focusIndex;
+
                     if ( error ) {
                         if ( self.events['data:error'] ) {
                             /**
@@ -838,10 +831,14 @@ List.prototype.move = function ( direction ) {
                              */
                             self.emit('data:error', error);
                         }
-                    } else {
-                        if ( data ) {
-                            self.setData({data: data, focusIndex: pos || pos === 0 ? pos : data.length < self.size ?  data.length - 1 : self.size - 1});
+                    } else if ( data ) {
+                        if ( pos || pos === 0 ) {
+                            focusIndex = pos;
+                        } else {
+                            focusIndex = data.length < self.size ?  data.length - 1 : self.size - 1;
                         }
+
+                        self.setData({data: data, focusIndex: focusIndex});
                     }
                 });
                 break;
@@ -874,10 +871,8 @@ List.prototype.move = function ( direction ) {
                              */
                             self.emit('data:error', error);
                         }
-                    } else {
-                        if ( data ) {
-                            self.setData({data: data, focusIndex: pos ? pos : 0});
-                        }
+                    } else if ( data ) {
+                        self.setData({data: data, focusIndex: pos ? pos : 0});
                     }
                 });
                 break;
@@ -888,6 +883,8 @@ List.prototype.move = function ( direction ) {
         case keys.end:
             if ( this.provider ) {
                 this.provider.get(direction, function ( error, data, pos ) {
+                    var focusIndex;
+
                     if ( error ) {
                         if ( self.events['data:error'] ) {
                             /**
@@ -897,10 +894,14 @@ List.prototype.move = function ( direction ) {
                              */
                             self.emit('data:error', error);
                         }
-                    } else {
-                        if ( data ) {
-                            self.setData({data: data, focusIndex: pos || pos === 0 ? pos : data.length < self.size ?  data.length - 1 : self.size - 1});
+                    } else if ( data ) {
+                        if ( pos || pos === 0 ) {
+                            focusIndex = pos;
+                        } else {
+                            focusIndex = data.length < self.size ?  data.length - 1 : self.size - 1;
                         }
+
+                        self.setData({data: data, focusIndex: focusIndex});
                     }
                 });
                 break;
@@ -1028,7 +1029,7 @@ List.prototype.focusItem = function ( $item ) {
  * @fires module:stb/ui/list~List#blur:item
  */
 List.prototype.blurItem = function ( $item ) {
-    if ( DEBUG ) {
+    if ( DEVELOP ) {
         if ( arguments.length !== 1 ) { throw new Error(__filename + ': wrong arguments number'); }
     }
 
@@ -1053,6 +1054,7 @@ List.prototype.blurItem = function ( $item ) {
              */
             this.emit('blur:item', {$item: $item});
         }
+
         return true;
     }
 
