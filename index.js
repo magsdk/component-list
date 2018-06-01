@@ -63,9 +63,6 @@ function List ( config ) {
             throw new Error(__filename + ': wrong config type');
         }
         // init parameters checks
-        if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
-            throw new Error(__filename + ': wrong or empty config.className');
-        }
         if ( config.type && Number(config.type) !== config.type ) {
             throw new Error(__filename + ': config.type must be a number');
         }
@@ -133,8 +130,6 @@ function List ( config ) {
      */
     this.provider = null;
 
-
-    config.className = config.className || '';
 
     if ( this.type === this.TYPE_HORIZONTAL ) {
         config.className += ' horizontal';
@@ -656,26 +651,6 @@ List.prototype.renderView = function ( index ) {
     // nothing was done
     return false;
 };
-
-
-/**
- * Jump to the opposite side.
- *
- * @event module:stb/ui/list~List#cycle
- *
- * @type {Object}
- * @property {number} direction key code initiator of movement
- */
-
-
-/**
- * Attempt to go beyond the edge of the list.
- *
- * @event module:stb/ui/list~List#overflow
- *
- * @type {Object}
- * @property {number} direction key code initiator of movement
- */
 
 
 /**
