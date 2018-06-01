@@ -63,9 +63,6 @@ function List ( config ) {
             throw new Error(__filename + ': wrong config type');
         }
         // init parameters checks
-        if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
-            throw new Error(__filename + ': wrong or empty config.className');
-        }
         if ( config.type && Number(config.type) !== config.type ) {
             throw new Error(__filename + ': config.type must be a number');
         }
@@ -133,8 +130,6 @@ function List ( config ) {
      */
     this.provider = null;
 
-
-    config.className = config.className || '';
 
     if ( this.type === this.TYPE_HORIZONTAL ) {
         config.className += ' horizontal';
