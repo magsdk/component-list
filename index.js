@@ -684,8 +684,9 @@ List.prototype.move = function ( direction ) {
         case keys.left:
             if ( this.type === this.TYPE_HORIZONTAL ) {
                 force = true;
+            } else {
+                break;
             }
-            break;
         case keys.up:
             if ( force || this.type === this.TYPE_VERTICAL ) {
                 if ( this.$focusItem && this.$focusItem.index > 0 ) {
@@ -725,8 +726,9 @@ List.prototype.move = function ( direction ) {
         case keys.right:
             if ( this.type === this.TYPE_HORIZONTAL ) {
                 force = true;
+            } else {
+                break;
             }
-            break;
         case keys.down:
             if ( force || this.type === this.TYPE_VERTICAL ) {
                 if ( this.$focusItem && this.$focusItem.index < this.data.length - 1 ) {
