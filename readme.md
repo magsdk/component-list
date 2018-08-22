@@ -27,7 +27,7 @@ Add the singleton to the scope:
 var List = require('mag-component-list');
 ```
 
-Create check list instance:
+Create list instance:
 
 ```js
 var list = new List({
