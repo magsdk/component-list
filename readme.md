@@ -9,6 +9,7 @@ List component
 
 
 List is a component to build user interface, an instance of [Component](https://github.com/magsdk/component) module.
+May be associated with [mag-data-cacher](https://github.com/magsdk/data-cacher) and [stb-component-scrollbar](https://github.com/stbsdk/component-scrollbar).
 
 
 ## Installation ##
@@ -23,7 +24,78 @@ npm install mag-component-list
 Add the singleton to the scope:
 
 ```js
-var list = require('mag-component-list');
+var List = require('mag-component-list');
+```
+
+Create check list instance:
+
+```js
+var list = new List({
+    cycle: false,
+    className: 'list',
+
+    data: [ 
+        '0',
+        '1',
+        '2',
+        '3',
+        '4'
+    ],
+
+    // custom render function
+    render: function ( $item, config ) {},
+    // data provider to get visible part from all data, may use mag-data-cacher 
+    provider: dataProvider,
+    // associated ScrollBar component link, may use stb-component-scrollbar
+    scroll: new ScrollBar({}),
+    size: 3,
+    focusIndex: 0,
+    propagate: false,
+    type: List.prototype.TYPE_HORIZONTAL,
+    events: {
+        'focus:item': function ( event ) {
+            console.log(event);
+        },
+        'click:item': function ( event ) {
+            console.log(event);
+        }
+    }
+});
+
+To change data after creation:
+
+```js
+list.setData({
+    focusIndex: 0,
+    data: [
+        'Item 0',
+        'Item 1'
+    ]
+});
+```
+
+To change focus position by index:
+
+```js
+list.focusIndex(index);
+```
+
+To change focus item:
+
+```js
+list.focusItem($item);
+```
+
+To blur item:
+
+```js
+list.blurItem($item);
+```
+
+To mark item:
+
+```js
+list.markItem($item, true);
 ```
 
 
