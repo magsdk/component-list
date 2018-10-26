@@ -5,6 +5,9 @@
 
 /* eslint no-path-concat: 0 */
 /* eslint complexity: [error, 37] */
+/* eslint max-lines-per-function: 1 */
+/* eslint no-fallthrough: 1 */
+/* eslint complexity: 1 */
 
 'use strict';
 
@@ -62,7 +65,6 @@ function List ( config ) {
         if ( typeof config !== 'object' ) {
             throw new Error(__filename + ': wrong config type');
         }
-        // init parameters checks
         if ( config.type && Number(config.type) !== config.type ) {
             throw new Error(__filename + ': config.type must be a number');
         }
@@ -129,7 +131,6 @@ function List ( config ) {
      * @type {Provider}
      */
     this.provider = null;
-
 
     if ( this.type === this.TYPE_HORIZONTAL ) {
         config.className += ' horizontal';
@@ -440,6 +441,10 @@ List.prototype.init = function ( config ) {
     }
 
     if ( this.provider ) {
+        if ( this.provider.blocked ) {
+            return;
+        }
+
         this.provider.get( null, function ( error, data ) {
             if ( error ) {
                 if ( self.events['data:error'] ) {
@@ -696,6 +701,10 @@ List.prototype.move = function ( direction ) {
                         this.focusItem(this.$focusItem.previousSibling);
                     }
                 } else if ( this.provider ) {
+                    if ( this.provider.blocked ) {
+                        return;
+                    }
+
                     this.provider.get(direction, function ( error, data, pos ) {
                         if ( error ) {
                             if ( self.events['data:error'] ) {
@@ -738,6 +747,10 @@ List.prototype.move = function ( direction ) {
                         this.focusItem(this.$focusItem.nextSibling);
                     }
                 } else if ( this.provider ) {
+                    if ( this.provider.blocked ) {
+                        return;
+                    }
+
                     this.provider.get(direction, function ( error, data, pos ) {
                         if ( error ) {
                             if ( self.events['data:error'] ) {
@@ -767,6 +780,10 @@ List.prototype.move = function ( direction ) {
             break;
         case keys.pageUp:
             if ( this.provider ) {
+                if ( this.provider.blocked ) {
+                    return;
+                }
+
                 this.provider.get(direction, function ( error, data, pos ) {
                     if ( error ) {
                         if ( self.events['data:error'] ) {
@@ -796,6 +813,10 @@ List.prototype.move = function ( direction ) {
             break;
         case keys.pageDown:
             if ( this.provider ) {
+                if ( this.provider.blocked ) {
+                    return;
+                }
+
                 this.provider.get(direction, function ( error, data, pos ) {
                     var focusIndex;
 
@@ -838,6 +859,10 @@ List.prototype.move = function ( direction ) {
             break;
         case keys.home:
             if ( this.provider ) {
+                if ( this.provider.blocked ) {
+                    return;
+                }
+
                 this.provider.get(direction, function ( error, data, pos ) {
                     if ( error ) {
                         if ( self.events['data:error'] ) {
@@ -859,6 +884,10 @@ List.prototype.move = function ( direction ) {
             break;
         case keys.end:
             if ( this.provider ) {
+                if ( this.provider.blocked ) {
+                    return;
+                }
+
                 this.provider.get(direction, function ( error, data, pos ) {
                     var focusIndex;
 
