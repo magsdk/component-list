@@ -364,6 +364,16 @@ List.prototype.init = function ( config ) {
                 }
             }
         },
+        /**
+         * Item mouseover handler.
+         *
+         * @this Element
+         */
+        onHover = function () {
+            if ( this.data ) {
+                self.focusItem(this);
+            }
+        },
         item, idx;
 
     if ( DEVELOP ) {
@@ -434,6 +444,10 @@ List.prototype.init = function ( config ) {
             item.index = idx;
             //item.className = 'item theme-list-item';
             item.className = 'item';
+
+            if ( this.hoverable ) {
+                item.addEventListener('mouseover', onHover);
+            }
 
             item.addEventListener('click', onClick);
             this.$body.appendChild(item);
@@ -709,10 +723,10 @@ List.prototype.move = function ( direction ) {
                         if ( error ) {
                             if ( self.events['data:error'] ) {
                                 /**
-                                     * Provider get error while take new data
-                                     *
-                                     * @event module:stb/ui/list~List#data:error
-                                     */
+                                 * Provider get error while take new data
+                                 *
+                                 * @event module:stb/ui/list~List#data:error
+                                 */
                                 self.emit('data:error', error);
                             }
                         } else if ( data ) {
@@ -755,10 +769,10 @@ List.prototype.move = function ( direction ) {
                         if ( error ) {
                             if ( self.events['data:error'] ) {
                                 /**
-                                     * Provider get error while take new data
-                                     *
-                                     * @event module:stb/ui/list~List#data:error
-                                     */
+                                 * Provider get error while take new data
+                                 *
+                                 * @event module:stb/ui/list~List#data:error
+                                 */
                                 self.emit('data:error', error);
                             }
                         } else if ( data ) {
